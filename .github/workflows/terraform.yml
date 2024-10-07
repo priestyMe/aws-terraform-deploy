@@ -28,7 +28,7 @@ jobs:
       - name: Terraform Init
         run: terraform init
 
-        - name: Terraform Plan
+      - name: Terraform Plan
         run: terraform plan -chdir=terraform -var="instance_type=${{ secrets.INSTANCE_TYPE }}" -var="ami=${{ secrets.AMI_ID }}" -var="region=${{ secrets.AWS_REGION }}"
 
       - name: Terraform Apply
