@@ -1,4 +1,4 @@
-name: Terraform Workflow
+name: Terraform
 
 on:
   pull_request:
@@ -12,7 +12,7 @@ jobs:
   terraform:
     name: Terraform
     runs-on: ubuntu-latest
-
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -20,23 +20,19 @@ jobs:
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v1
         with:
-          terraform_version: 1.5.0
+          terraform_version: 1.0.0
 
       - name: Create terraform.tfvars file
         run: |
-          echo "instance_type = \"${{ secrets.INSTANCE_TYPE }}\"" >> terraform.tfvars
-          echo "ami = \"${{ secrets.AMI_ID }}\"" >> terraform.tfvars
-          echo "region = \"${{ secrets.AWS_REGION }}\"" >> terraform.tfvars
-      
+          mkdir -p terraform  # Create the directory if it doesn't exist
+          echo "instance_type = \"${{ secrets.INSTANCE_TYPE }}\"" >> terraform/terraform.tfvars
+          echo "ami = \"${{ secrets.AMI_ID }}\"" >> terraform/terraform.tfvars
+          echo "region = \"${{ secrets.AWS_REGION }}\"" >> terraform/terraform.tfvars
+
       - name: Terraform Init
         run: terraform init
+        working-directory: terraform  # Path for the .tfvars
 
       - name: Terraform Plan
-        if: github.event_name == 'pull_request'
-        run: terraform plan -var-file="terraform.tfvars"
-
-      - name: Terraform Apply
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: terraform apply -auto-approve
+        run: terraform plan -var-file=terraform.tfvars
+        working-directory: terraform  # Path for the .tfvars
