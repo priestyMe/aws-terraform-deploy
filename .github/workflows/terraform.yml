@@ -16,7 +16,7 @@ jobs:
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v1
         with:
-          terraform_version: 1.0.0
+          terraform_version: 5.70.0
 
       - name: Configure AWS credentials
         env:
@@ -27,10 +27,14 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
+        working-directory: terraform-modules/ec2-instances
 
-        - name: Terraform Plan
-        run: terraform plan -chdir=terraform -var="instance_type=${{ secrets.INSTANCE_TYPE }}" -var="ami=${{ secrets.AMI_ID }}" -var="region=${{ secrets.AWS_REGION }}"
-
+      - name: Terraform Plan
+        run: terraform plan -var="instance_type=${{ secrets.INSTANCE_TYPE }}" -var="ami_id=${{ secrets.AMI_ID }}" -var="region=${{ secrets.AWS_REGION }}" -var="ssh_ip=${{ secrets.SSH_IP }}" -var="aws_access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" -var="aws_secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+        working-directory: terraform-modules/ec2-instances
+        
       - name: Terraform Apply
         if: github.event_name == 'pull_request'
-        run: terraform apply -auto-approve -var="instance_type=${{ secrets.INSTANCE_TYPE }}" -var="ami=${{ secrets.AMI_ID }}" -var="region=${{ secrets.AWS_REGION }}"
+        run: terraform apply -auto-approve -var="instance_type=${{ secrets.INSTANCE_TYPE }}" -var="ami_id=${{ secrets.AMI_ID }}" -var="region=${{ secrets.AWS_REGION }}" -var="ssh_ip=${{ secrets.SSH_IP }}" -var="aws_access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" -var="aws_secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+        working-directory: terraform-modules/ec2-instances
+        
