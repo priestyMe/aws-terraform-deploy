@@ -28,8 +28,14 @@ jobs:
       - name: Terraform Init
         run: terraform init
 
-        - name: Terraform Plan
-        run: terraform plan -chdir=terraform -var="instance_type=${{ secrets.INSTANCE_TYPE }}" -var="ami=${{ secrets.AMI_ID }}" -var="region=${{ secrets.AWS_REGION }}"
+      - name: Debug Secrets
+        run: |
+          echo "Instance Type: ${{ secrets.INSTANCE_TYPE }}"
+          echo "AMI ID: ${{ secrets.AMI_ID }}"
+          echo "Region: ${{ secrets.AWS_REGION }}"
+          
+      - name: Terraform Plan
+        run: terraform plan -var="instance_type=${{ secrets.INSTANCE_TYPE }}" -var="ami=${{ secrets.AMI_ID }}" -var="region=${{ secrets.AWS_REGION }}"
 
       - name: Terraform Apply
         if: github.event_name == 'pull_request'
