@@ -44,4 +44,3 @@ resource "aws_subnet" "main" {
   cidr_block = var.subnet_cidr
   availability_zone = var.availability_zone
 }
-
