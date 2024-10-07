@@ -1,0 +1,26 @@
+# Terraform specific files
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+*.tfvars
+crash.log
+
+# Sensitive environment or config files
+*.env
+
+# Logs
+*.log
+*.log.*
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Temporary files or directories
+*.swp
+*.tmp
+*.bak
+
+# IDE/Editor directories
+.vscode/
+.idea/
