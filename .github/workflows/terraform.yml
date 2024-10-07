@@ -17,18 +17,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1  # Set your AWS region
-
       - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@v1
         with:
           terraform_version: 1.5.0
 
+      - name: Create terraform.tfvars file
+        run: |
+          echo "instance_type = \"${{ secrets.INSTANCE_TYPE }}\"" >> terraform.tfvars
+          echo "ami = \"${{ secrets.AMI_ID }}\"" >> terraform.tfvars
+          echo "region = \"${{ secrets.AWS_REGION }}\"" >> terraform.tfvars
+      
       - name: Terraform Init
         run: terraform init
 
@@ -37,5 +36,7 @@ jobs:
         run: terraform plan -var-file="terraform.tfvars"
 
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform apply -auto-approve -var-file="terraform.tfvars"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: terraform apply -auto-approve
