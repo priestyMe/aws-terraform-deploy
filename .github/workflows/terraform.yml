@@ -27,10 +27,13 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
+        working-directory: terraform-modules/ec2-instances
 
-        - name: Terraform Plan
-        run: terraform plan -chdir=terraform -var="instance_type=${{ secrets.INSTANCE_TYPE }}" -var="ami=${{ secrets.AMI_ID }}" -var="region=${{ secrets.AWS_REGION }}"
-
+      - name: Terraform Plan
+        run: terraform plan -var="instance_type=${{ secrets.INSTANCE_TYPE }}" -var="ami_id=${{ secrets.AMI_ID }}" -var="region=${{ secrets.AWS_REGION }}" -var="ssh_ip=${{ secrets.SSH_IP }}"
+        working-directory: terraform-modules/ec2-instances
+        
       - name: Terraform Apply
         if: github.event_name == 'pull_request'
-        run: terraform apply -auto-approve -var="instance_type=${{ secrets.INSTANCE_TYPE }}" -var="ami=${{ secrets.AMI_ID }}" -var="region=${{ secrets.AWS_REGION }}"
+        run: terraform apply -auto-approve -var="instance_type=${{ secrets.INSTANCE_TYPE }}" -var="ami_id=${{ secrets.AMI_ID }}" -var="region=${{ secrets.AWS_REGION }}" -var="ssh_ip=${{ secrets.SSH_IP }}"
+        working-directory: terraform-modules/ec2-instances
