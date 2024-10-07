@@ -4,15 +4,11 @@ on:
   pull_request:
     branches:
       - main
-  push:
-    branches:
-      - main
 
 jobs:
   terraform:
-    name: Terraform
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -22,17 +18,25 @@ jobs:
         with:
           terraform_version: 1.0.0
 
-      - name: Create terraform.tfvars file
+      - name: Configure AWS credentials
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
-          mkdir -p terraform  # Create the directory if it doesn't exist
-          echo "instance_type = \"${{ secrets.INSTANCE_TYPE }}\"" >> terraform/terraform.tfvars
-          echo "ami = \"${{ secrets.AMI_ID }}\"" >> terraform/terraform.tfvars
-          echo "region = \"${{ secrets.AWS_REGION }}\"" >> terraform/terraform.tfvars
+          echo "AWS credentials configured."
 
       - name: Terraform Init
         run: terraform init
-        working-directory: terraform  # Path for the .tfvars
 
       - name: Terraform Plan
-        run: terraform plan -var-file=terraform.tfvars
-        working-directory: terraform  # Path for the .tfvars
+        run: terraform plan \
+          -var="instance_type=${{ secrets.INSTANCE_TYPE }}" \
+          -var="ami=${{ secrets.AMI_ID }}" \
+          -var="region=${{ secrets.AWS_REGION }}"
+
+      - name: Terraform Apply
+        if: github.event_name == 'pull_request'
+        run: terraform apply -auto-approve \
+          -var="instance_type=${{ secrets.INSTANCE_TYPE }}" \
+          -var="ami=${{ secrets.AMI_ID }}" \
+          -var="region=${{ secrets.AWS_REGION }}"
