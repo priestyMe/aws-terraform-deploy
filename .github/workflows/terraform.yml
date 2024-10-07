@@ -24,11 +24,17 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           echo "AWS credentials configured."
+          
+      - name: Debug Secrets
+        run: |
+          echo "Instance Type: ${{ secrets.INSTANCE_TYPE }}"
+          echo "AMI ID: ${{ secrets.AMI_ID }}"
+          echo "Region: ${{ secrets.AWS_REGION }}"
 
       - name: Terraform Init
         run: terraform init
 
-        - name: Terraform Plan
+      - name: Terraform Plan
         run: terraform plan -chdir=terraform -var="instance_type=${{ secrets.INSTANCE_TYPE }}" -var="ami=${{ secrets.AMI_ID }}" -var="region=${{ secrets.AWS_REGION }}"
 
       - name: Terraform Apply
