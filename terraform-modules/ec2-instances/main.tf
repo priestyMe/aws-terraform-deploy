@@ -6,6 +6,7 @@ resource "aws_vpc" "main" {
   cidr_block = var.vpc_cidr
 }
 
+# create the resources
 resource "aws_security_group" "allow_ssh" {
   name        = "allow_ssh"
   description = "Allow SSH access"

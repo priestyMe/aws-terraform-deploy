@@ -1,2 +1,2 @@
-ami_id     = "ami-0c55b159cbfafe1f0"  # desired AMI ID
+ami_id     = "ami-0c55b159cbfafe1f0"  # desired AMI ID for the instance
 ssh_ip     = "220.253.82.174"         # public IP for SSH access
