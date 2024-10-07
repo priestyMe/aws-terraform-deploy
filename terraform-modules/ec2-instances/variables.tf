@@ -45,3 +45,15 @@ variable "instance_name" {
   type        = string
   default     = "ec2-instance-deployed-with-terraform"
 }
+
+variable "aws_access_key" {
+  description = "AWS Access Key ID"
+  type        = string
+  sensitive   = true  # Marking it as sensitive to avoid logging it in the plan
+}
+
+variable "aws_secret_key" {
+  description = "AWS Secret Access Key"
+  type        = string
+  sensitive   = true  # Marking it as sensitive to avoid logging it in the plan
+}
