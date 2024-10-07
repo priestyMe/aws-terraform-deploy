@@ -1,7 +1,7 @@
 variable "region" {
   description = "AWS region"
   type        = string
-  default     = "ap-southeast-2"
+  default     = "us-east-1"
 }
 
 variable "vpc_cidr" {
@@ -35,7 +35,7 @@ variable "ssh_ip" {
 variable "availability_zone" {
   description = "Availability zone"
   type        = string
-  default     = "apse2-az1"
+  default     = "us-east-1a"
 }
 
 variable "instance_name" {
