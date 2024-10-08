@@ -15,19 +15,6 @@ Features
 	•	Instance type and AMI configurations as secrets.
 	•	Auto-scaling and monitoring (future enhancements).
 
-Project Structure
-
-├── terraform-modules
-│   └── ec2-instance
-│       ├── main.tf           # Defines EC2 instance
-│       ├── variables.tf      # Input variables for EC2 module
-│       ├── outputs.tf        # Output values for the module
-├── .github
-│   └── workflows
-│       └── terraform.yml     # GitHub Actions for automation
-├── README.md                 # Project documentation
-└── .gitignore                # Ignored files such as .tfvars
-
 Prerequisites
 
 	•	Terraform CLI: Make sure you have Terraform installed. Download Terraform
