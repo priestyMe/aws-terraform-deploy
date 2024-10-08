@@ -1,9 +1,23 @@
 name: Terraform
 
 on:
-  pull_request:
-    branches:
-      - main
+    pull_request:
+      branches:
+        - main
+      paths:
+        - 'terraform-modules/**'    # Only trigger when files in the terraform directory -
+        - 'dev/**'                  # and dev directory -
+        - 'prod/**'                 # and prod directory are changed
+        - '!README.md'      # Ignore changes to README.md
+  
+    push:
+      branches:
+        - main
+      paths:
+        - 'terraform-modules/**'    # Only trigger when files in the terraform directory -
+        - 'dev/**'                  # and dev directory -
+        - 'prod/**'                 # and prod directory are changed
+        - '!README.md'      # Ignore changes to README.md
 
 jobs:
   terraform:
