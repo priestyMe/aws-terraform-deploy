@@ -78,4 +78,3 @@ jobs:
           -var="ssh_key_path=~/.ssh/asg-deploy.pem" \
           -var="key_name=${{ secrets.AWS_KEY_NAME }}"
         working-directory: terraform-modules/ec2-instances
-        
