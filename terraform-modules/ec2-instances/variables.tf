@@ -57,3 +57,12 @@ variable "aws_secret_key" {
   type        = string
   sensitive   = true  # Marking it as sensitive to avoid logging it in the plan
 }
+
+variable "ssh_key_path" {
+  description = "Path to the SSH private key for accessing the EC2 instance"
+  type        = string
+}
+
+variable "key_name" {
+  description = "Name of the SSH key pair"
+}
