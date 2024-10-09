@@ -41,7 +41,7 @@ jobs:
       
       - name: Create SSH directory
         run: mkdir -p ~/.ssh
-  
+        
       - name: Decode SSH key
         run: |
             echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/asg-deploy.pem
