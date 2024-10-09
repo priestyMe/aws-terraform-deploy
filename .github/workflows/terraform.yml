@@ -38,6 +38,9 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           echo "AWS credentials configured."
+      
+      - name: List SSH directory
+        run: ls -l ~/.ssh
 
       - name: Decode SSH key
         run: |
