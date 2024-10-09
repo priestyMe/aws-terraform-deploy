@@ -39,13 +39,14 @@ jobs:
         run: |
           echo "AWS credentials configured."
       
-      - name: List SSH directory
-        run: ls -l ~/.ssh
-
+      - name: Create SSH directory
+        run: mkdir -p ~/.ssh
+  
       - name: Decode SSH key
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/asg-deploy.pem
           chmod 400 ~/.ssh/asg-deploy.pem
+          echo "SSH key created at ~/.ssh/asg-deploy.pem"
 
       - name: Terraform Init
         run: terraform init
