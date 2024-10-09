@@ -1,10 +1,12 @@
-# output instance_id
-output "instance_id" {
-  description = "The ID of the EC2 instance"
-  value       = aws_instance.ec2-instance.id
+# Data source to filter instances by the Auto Scaling Group tag
+data "aws_instances" "asg_instances" {
+  filter {
+    name   = "tag:aws:autoscaling:groupName"
+    values = [aws_autoscaling_group.ec2_asg.name]
+  }
 }
 
-output "instance_public_ip" {
-  description = "The public IP address of the EC2 instance"
-  value       = aws_instance.ec2-instance.public_ip
+# Output the instance IDs of the instances in the Auto Scaling Group
+output "instance_ids" {
+  value = data.aws_instances.asg_instances.*.id
 }
