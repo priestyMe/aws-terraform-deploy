@@ -1,11 +1,15 @@
 # Output the IDs of instances in the Auto-Scaling Group
 output "instance_ids" {
-  value = aws_autoscaling_group.ec2_asg.instances
+  value = [for instance in aws_autoscaling_group.ec2_asg.instances : instance.id]
 }
 
 # Data source to retrieve instances launched by the Auto-Scaling Group based on their tags
+data "aws_autoscaling_group" "asg" {
+  name = aws_autoscaling_group.ec2_asg.name
+}
+
 data "aws_instance" "asg_instances" {
-  count = length(aws_autoscaling_group.ec2_asg.instances)  # This ensures only instances in the ASG are fetched
+  count = length(data.aws_autoscaling_group.asg.instances)
 
   filter {
     name   = "tag:Name"
