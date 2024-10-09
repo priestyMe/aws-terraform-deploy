@@ -1,23 +1,17 @@
-# Output the IDs of instances in the Auto-Scaling Group
+# Output the instance IDs of the instances in the Auto-Scaling Group
 output "instance_ids" {
-  value = [for instance in aws_autoscaling_group.ec2_asg.instances : instance.id]
+  value = aws_autoscaling_group.ec2_asg.instance_ids
 }
 
-# Data source to retrieve instances launched by the Auto-Scaling Group based on their tags
-data "aws_autoscaling_group" "asg" {
-  name = aws_autoscaling_group.ec2_asg.name
-}
-
-data "aws_instance" "asg_instances" {
-  count = length(data.aws_autoscaling_group.asg.instances)
-
+# Data source to filter instances by tags
+data "aws_instances" "asg_instances" {
   filter {
-    name   = "tag:Name"
-    values = [var.instance_name]
+    name   = "tag:aws:autoscaling:groupName"
+    values = [aws_autoscaling_group.ec2_asg.name]
   }
 }
 
-# Output the public IPs of the instances managed by the Auto-Scaling Group
+# Output the public IPs of the instances in the Auto-Scaling Group
 output "instance_public_ips" {
-  value = [for instance in data.aws_instance.asg_instances : instance.public_ip]
+  value = data.aws_instances.asg_instances.*.public_ip
 }
