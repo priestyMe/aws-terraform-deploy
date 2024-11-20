@@ -89,3 +89,4 @@ resource "aws_autoscaling_policy" "scale_down" {
   adjustment_type         = "ChangeInCapacity"
   cooldown                = 300
 }
+
